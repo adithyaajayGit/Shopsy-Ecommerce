@@ -11,6 +11,7 @@ var fileUpload=require('express-fileupload')
 var db=require('./config/connection');
 const { log } = require('console');
 var session=require('express-session')
+const nocache=require("nocache")
 
 var app = express();
 
@@ -27,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
 app.use(express.urlencoded({ extended : false}));
 app.use(express.json()); 
-app.use(session({secret:"Key",cookie:{maxAge:600000}}))
+app.use(session({secret:"Key",cookie:{maxAge:6000000}}))
 
 db.connect((err) => {
   if (err) {
@@ -38,6 +39,7 @@ db.connect((err) => {
   }
 });
 app.use(express.static('public'));
+app.use(nocache ());
 
 
 app.use('/', userRouter);

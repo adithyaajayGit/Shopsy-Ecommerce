@@ -22,6 +22,8 @@
       <td>{{this.category}}</td>
       <td>{{this.description}}</td>
       <td><img  style="width:50px;height:50px" src="/product-images/{{this._id}}.jpg" alt=""></td>
+      <td><a href="/admin/edit-product" class="btn btn-primary">Edit</a></td>
+      <td><a href="/admin/delete-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{this.productName}} ?')">Delete</a></td>
     </tr>
 {{/each}}
 
