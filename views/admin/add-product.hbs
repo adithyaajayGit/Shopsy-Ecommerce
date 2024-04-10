@@ -5,28 +5,25 @@
                 <h2 class="text-center">Add Product</h2>
                 <form action="/admin/add-product" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="productName">Name</label>
+                        <input type="text" class="form-control" id="productName" name="productName" aria-describedby="productNameHelp">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Category</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="category">Category</label>
+                        <input type="text" class="form-control" id="category" name="category" aria-describedby="categoryHelp">
                     </div>
-
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Price</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="price">Price</label>
+                        <input type="text" class="form-control" id="price" name="price" aria-describedby="priceHelp">
                     </div>
-
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Description</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" aria-describedby="descriptionHelp">
                     </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlFile1">Image</label>
-                            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image">
-                        </div>
-
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" class="form-control-file" id="image" name="Image">
+                    </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
