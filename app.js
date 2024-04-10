@@ -35,6 +35,8 @@ db.connect((err) => {
       // Proceed with your application logic
   }
 });
+app.use(express.static('public'));
+
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
