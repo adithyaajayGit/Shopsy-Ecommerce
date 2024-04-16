@@ -43,7 +43,15 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:ObjectId(userId)})
             if(userCart){
-
+                    db.get().collection(collection.CART_COLLECTION)
+                    .updateOne({user:objectId(userId)},
+                    {
+                            $push:{products:objectId(proId)}
+                    }
+                    
+                ).then((response)=>{
+                    resolve()
+                })
             }else{
                 let cartobj={
                     user:objectId(userId),
@@ -54,5 +62,43 @@ module.exports={
                 })
             }
         })
+    },
+
+    getCartProducts: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
+                    {
+                        $match: { user: objectId(userId) }
+                    },
+                    {
+                        $lookup: {
+                            from: collection.PRODUCT_COLLECTION, // Assuming this is the correct collection name for products
+                            let: { prodList: '$products' },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $in: ['$_id', "$$prodList"]
+                                        }
+                                    }
+                                }
+                            ],
+                            as: 'cartItems'
+                        }
+                    }
+                ]).toArray();
+                
+                if (cartItems.length > 0) {
+                    resolve(cartItems[0].cartItems);
+                } else {
+                    resolve([]); // If no cart items found, resolve with an empty array
+                }
+            } catch (error) {
+                console.error("Error in getCartProducts:", error);
+                reject(error);
+            }
+        });
     }
+    
 }
