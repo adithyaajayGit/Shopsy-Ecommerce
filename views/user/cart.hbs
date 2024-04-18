@@ -12,14 +12,41 @@
       height: 100px;
       object-fit:fill;
     }
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .card-text {
+      color: #666;
+    }
+    .quantity-input {
+      width: 70px;
+      text-align: center;
+    }
+    .subtotal, .total {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
   </style>
 </head>
 <body>
   <div class="container mt-5">
     <h1 class="text-center mb-4">Your Shopping Cart</h1>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-9"> <!-- Increase width to col-md-9 -->
         {{#each products}}
+        {{#each this.product}}
         <div class="card mb-3">
           <div class="card-body">
             <h5 class="card-title">{{this.productName}}</h5>
@@ -27,18 +54,20 @@
               <div class="col-md-3">
                 <img src="/product-images/{{this._id}}.jpg" alt="Product Image" class="product-img">
               </div>
-              <div class="col-md-4">
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              <div class="col-md-5">
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
               </div>
               <div class="col-md-2">
                 <p class="card-text">$19.99</p>
               </div>
-              <div class="col-md-3">
+                      {{/each}}
+
+              <div class="col-md-2">
                 <div class="input-group">
                   <span class="input-group-prepend">
                     <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
                   </span>
-                  <input type="text" class="form-control quantity-input" value="1">
+                  <input type="text" class="form-control quantity-input" value={{this.quantity}}>
                   <span class="input-group-append">
                     <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
                   </span>
@@ -48,9 +77,8 @@
           </div>
         </div>
         {{/each}}
-        <!-- More products can be added here -->
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3"> <!-- Adjust remaining width accordingly -->
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Order Summary</h5>
@@ -74,7 +102,5 @@
       </div>
     </div>
   </div>
-
-  
 </body>
 </html>

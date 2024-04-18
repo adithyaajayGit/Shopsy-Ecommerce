@@ -89,25 +89,26 @@ module.exports={
                         $match: { user: objectId(userId) }
                     },
                     {
-                        $lookup: {
-                            from: collection.PRODUCT_COLLECTION, 
-                            let: { prodList: '$products' },
-                            pipeline: [
-                                {
-                                    $match: {
-                                        $expr: {
-                                            $in: ['$_id', "$$prodList"]
-                                        }
-                                    }
-                                }
-                            ],
-                            as: 'cartItems'
+                        $unwind:'$products'
+                    },
+                    {
+                            $project:{
+                                item:'$products.item',
+                                quantity:'$products.quantity'
+                            }
+                    },
+                    {
+                        $lookup:{
+                            from:collection.PRODUCT_COLLECTION,
+                            localField:'item',
+                            foreignField:'_id',
+                            as:'product'
                         }
                     }
-                ]).toArray();
-                
+                ]).toArray();                
                 if (cartItems.length > 0) {
-                    resolve(cartItems[0].cartItems);
+                    console.log(cartItems)
+                    resolve(cartItems);
                 } else {
                     resolve([]); // If no cart items found, resolve with an empty array
                 }
