@@ -9,7 +9,7 @@
                         <h5 class="card-title">{{this.productName}}</h5>
                          <h5 class=>₹{{this.price}}</h5>
                         <p class="card-text">{{this.description}}</p>
-                        <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add to Cart</a>
+                        <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to cart</button>
                     </div>
                 </div>
             </div>
@@ -62,4 +62,5 @@
 }
 
 </style>
+
 
