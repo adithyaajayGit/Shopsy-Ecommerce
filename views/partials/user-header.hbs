@@ -4,7 +4,7 @@
             aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-<a class="navbar-brand" href="#">
+<a class="navbar-brand" href="/">
   <img src="https://play-lh.googleusercontent.com/jKlQupIE8GbI_rcPOmzYOikRYPrR-GNKWzU6Xd2BG78O1VVF3dd8yVZCM_Ue2S9ywrc" alt="Shopsy Logo" style="max-width: 50px; height: auto;">
 </a>
 
@@ -15,7 +15,7 @@
                     <a class="nav-link" href="/">Products <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/cart">Cart</a>
+                    <a class="nav-link" href="/cart">Cart  <span class="badge badge-success">{{cartCount}}</span></a>
                 </li>
                 {{#if user}}
                 <li class="nav-item">

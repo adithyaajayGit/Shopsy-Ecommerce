@@ -73,7 +73,7 @@ module.exports={
                     },
                     {
                         $lookup: {
-                            from: collection.PRODUCT_COLLECTION, // Assuming this is the correct collection name for products
+                            from: collection.PRODUCT_COLLECTION, 
                             let: { prodList: '$products' },
                             pipeline: [
                                 {
@@ -99,6 +99,17 @@ module.exports={
                 reject(error);
             }
         });
+    },
+
+    getCartCount:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let count=0
+        let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+        if(cart){
+                count=cart.products.length
+        }
+        resolve(count)
+        })
     }
     
 }
