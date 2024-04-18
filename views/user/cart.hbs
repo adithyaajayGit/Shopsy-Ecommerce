@@ -46,30 +46,28 @@
     <div class="row">
       <div class="col-md-9"> <!-- Increase width to col-md-9 -->
         {{#each products}}
-        {{#each this.product}}
         <div class="card mb-3">
           <div class="card-body">
-            <h5 class="card-title">{{this.productName}}</h5>
+            <h5 class="card-title">{{this.product.productName}}</h5>
             <div class="row align-items-center">
               <div class="col-md-3">
-                <img src="/product-images/{{this._id}}.jpg" alt="Product Image" class="product-img">
+                <img src="/product-images/{{this.product._id}}.jpg" alt="Product Image" class="product-img">
               </div>
               <div class="col-md-5">
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p class="card-text">{{this.product.description}}</p>
               </div>
               <div class="col-md-2">
-                <p class="card-text">$19.99</p>
+                <h6 >₹{{this.product.price}}</h6>
               </div>
-                      {{/each}}
 
               <div class="col-md-2">
                 <div class="input-group">
                   <span class="input-group-prepend">
-                    <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
+                    <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
                   </span>
                   <input type="text" class="form-control quantity-input" value={{this.quantity}}>
                   <span class="input-group-append">
-                    <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
+                    <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',1)">+</button>
                   </span>
                 </div>
               </div>
@@ -104,3 +102,21 @@
   </div>
 </body>
 </html>
+
+<script>
+
+  function changequantity(cartId,proId,count){
+    $.ajax({
+      url:'/change-product-quantity',
+      data:{
+        cart:cartId,
+        product:proId,
+        count:count
+      },
+      method:'post',
+      success:(response)=>{
+        alert(response)
+      }
+    })
+  }
+</script>
