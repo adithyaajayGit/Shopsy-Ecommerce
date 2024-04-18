@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
 app.use(express.urlencoded({ extended : false}));
 app.use(express.json()); 
-app.use(session({secret:"Key",cookie:{maxAge:6000000}}))
+app.use(session({secret:"Key",cookie:{maxAge:60000000}}))
 
 db.connect((err) => {
   if (err) {
