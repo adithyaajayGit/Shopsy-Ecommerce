@@ -95,4 +95,10 @@ router.post('/remove-product',(req,res)=>{
 })
 
 
+router.get('/place-order',verifyLogin,async(req,res)=>{
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('user/place-order',{total})
+})
+
+
 module.exports = router;
