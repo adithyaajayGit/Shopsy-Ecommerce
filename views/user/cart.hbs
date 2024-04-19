@@ -69,11 +69,11 @@
             <div class="col-md-2">
                 <div class="input-group">
                     <span class="input-group-prepend">
-                        <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                        <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                     </span>
                     <span id="{{this.product._id}}" class="form-control quantity-input">{{this.quantity}}</span>
                     <span class="input-group-append">
-                        <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                        <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </span>
                 </div>
             </div>
@@ -96,7 +96,7 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Total Amount:
-                <span class="total" id="total">₹{{totalValue}}</span>
+                <span class="total" id="total">{{₹totalValue}}</span>
               </li>
             </ul>
             <a href="/place-order"><button class="btn btn-primary btn-block mt-3">Place Order</button></a>
@@ -109,13 +109,15 @@
 </html>
 
 <script>
+  
 
-  function changequantity(cartId,proId,count){
+  function changequantity(cartId,proId,userId,count){
     let quantity=parseInt(document.getElementById(proId).innerHTML)
     count=parseInt(count)
     $.ajax({
       url:'/change-product-quantity',
       data:{
+        user:userId,
         cart:cartId,
         product:proId,
         count:count,
@@ -128,6 +130,8 @@
                     location.reload()
         }else{
           document.getElementById(proId).innerHTML=quantity+count
+          document.getElementById('total').innerHTML=response.total
+          
         }
       }
     })
