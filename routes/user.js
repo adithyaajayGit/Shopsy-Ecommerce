@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers');
-const userHelpers=require('../helpers/user-helpers')
+const userHelpers=require('../helpers/user-helpers');
+const { response } = require('../app');
 const verifyLogin=(req,res,next)=>{
   if(req.session.loggedIn){
     next()
@@ -83,6 +84,15 @@ router.post('/change-product-quantity',(req,res,next)=>{
  })
 })
 
+
+router.post('/remove-product',(req,res)=>{
+  let cartId = req.body.cartId; // Assuming you're passing the cart ID
+  let productId = req.body.productId;
+
+  userHelpers.removeProductFromCart(cartId,productId).then((response)=>{
+    res.json(response);
+  })
+})
 
 
 module.exports = router;

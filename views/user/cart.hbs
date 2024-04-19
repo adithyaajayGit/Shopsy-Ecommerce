@@ -13,8 +13,15 @@
       object-fit:fill;
     }
     .card {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure the card spans the full width */
+    margin-bottom: 20px; /* Add some space between cards */
+}
+
+.card-body {
+    padding: 15px; /* Add padding to the card body */
+}
+
     .card-title {
       font-size: 1.2rem;
       font-weight: bold;
@@ -47,33 +54,39 @@
       <div class="col-md-9"> <!-- Increase width to col-md-9 -->
         {{#each products}}
         <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">{{this.product.productName}}</h5>
-            <div class="row align-items-center">
-              <div class="col-md-3">
+    <div class="card-body">
+        <h5 class="card-title">{{this.product.productName}}</h5>
+        <div class="row align-items-center">
+            <div class="col-md-3">
                 <img src="/product-images/{{this.product._id}}.jpg" alt="Product Image" class="product-img">
-              </div>
-              <div class="col-md-5">
-                <p class="card-text">{{this.product.description}}</p>
-              </div>
-              <div class="col-md-2">
-                <h6 >₹{{this.product.price}}</h6>
-              </div>
-
-              <div class="col-md-2">
-                <div class="input-group">
-                  <span class="input-group-prepend" >
-                    <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
-                  </span>
-                    <span id="{{this.product._id}}" class="form-control quantity-input">{{this.quantity}}</span>
-                  <span class="input-group-append">
-                    <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',1)">+</button>
-                  </span>
-                </div>
-              </div>
             </div>
-          </div>
+            <div class="col-md-5">
+                <p class="card-text">{{this.product.description}}</p>
+            </div>
+            <div class="col-md-2">
+                <h6>₹{{this.product.price}}</h6>
+            </div>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-prepend">
+                        <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                    </span>
+                    <span id="{{this.product._id}}" class="form-control quantity-input">{{this.quantity}}</span>
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                    </span>
+                </div>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-outline-danger remove-btn float-right" type="button" onclick="removeProduct('{{this._id}}', '{{this.product._id}}')">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
         {{/each}}
       </div>
       <div class="col-md-3"> <!-- Adjust remaining width accordingly -->
@@ -127,4 +140,30 @@
       }
     })
   }
+
+
+  function removeProduct(cartId, productId) {
+    if (confirm("Are you sure you want to remove this product from your cart?")) {
+        $.ajax({
+            url: '/remove-product',
+            method: 'POST', // 'Post' should be 'POST'
+            data: {
+                cartId: cartId,
+                productId: productId
+            },
+            success: function(response) {
+                if (response) { // Check if the response is true
+                    alert("Product removed from cart");
+                    location.reload();
+                } else {
+                    alert("Failed to remove product from cart");
+                }
+            },
+            error: function() {
+                alert("Error occurred while removing product from cart");
+            }
+        });
+    }
+}
+
 </script>

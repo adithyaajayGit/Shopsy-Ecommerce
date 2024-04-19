@@ -161,6 +161,25 @@ module.exports={
         })
     }
         })
+    },
+
+    removeProductFromCart:(cartId, productId) => {
+        return new Promise((resolve, reject) => {
+            // Connect to the database
+            db.get().collection(collection.CART_COLLECTION).updateOne(
+                { _id: ObjectId(cartId) },
+                { $pull: { products: { item: ObjectId(productId) } } },
+                (err, response) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(response.modifiedCount > 0); // Resolve with true if product was removed
+                    }
+                }
+            );
+        });
     }
+
+
     
 }
