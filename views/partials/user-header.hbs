@@ -4,10 +4,10 @@
             aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-<a class="navbar-brand" href="/">
-  <img src="https://play-lh.googleusercontent.com/jKlQupIE8GbI_rcPOmzYOikRYPrR-GNKWzU6Xd2BG78O1VVF3dd8yVZCM_Ue2S9ywrc" alt="Shopsy Logo" style="max-width: 50px; height: auto;">
-</a>
-
+        <a class="navbar-brand" href="/">
+            <img src="https://play-lh.googleusercontent.com/jKlQupIE8GbI_rcPOmzYOikRYPrR-GNKWzU6Xd2BG78O1VVF3dd8yVZCM_Ue2S9ywrc"
+                alt="Shopsy Logo" style="max-width: 50px; height: auto;">
+        </a>
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -15,7 +15,8 @@
                     <a class="nav-link" href="/">Products <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/cart">Cart  <span class="badge badge-success" id="cart-count">{{cartCount}}</span></a>
+                    <a class="nav-link" href="/cart">Cart <span class="badge badge-success"
+                            id="cart-count">{{cartCount}}</span></a>
                 </li>
                 {{#if user}}
                 <li class="nav-item">
@@ -31,43 +32,49 @@
                     {{else}}
                     Account
                     {{/if}}
-
                 </button>
-               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-  {{#if user}}
-  <a class="dropdown-item" href="/logout">Logout</a>
-  {{else}}
-  <a class="dropdown-item" href="/login">Login</a>
-  {{/if}}
-</div>
-
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {{#if user}}
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                    {{else}}
+                    <a class="dropdown-item" href="/login">Login</a>
+                    {{/if}}
+                </div>
             </div>
         </div>
     </nav>
 </header>
+
 <style>
+    .navbar-brand img {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .navbar-brand:hover img {
+        transform: scale(1.1);
+    }
+
     .dropdown-menu {
-  background-color: #fff;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0;
-  width: auto; /* Set width to auto */
-}
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        width: auto; /* Set width to auto */
+    }
 
-.dropdown-item {
-  display: block;
-  padding: 10px 20px; /* Adjust padding as needed */
-  color: #333;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  max-width: 200px; /* Set a maximum width */
-  width: 100%; /* Set width to 100% */
-  box-sizing: border-box; /* Include padding in width calculation */
-}
+    .dropdown-item {
+        display: block;
+        padding: 10px 20px; /* Adjust padding as needed */
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        max-width: 200px; /* Set a maximum width */
+        width: 100%; /* Set width to 100% */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
 
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
 </style>
