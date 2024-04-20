@@ -31,30 +31,31 @@
 
 <div class="container mt-5">
     <h1 class="text-center mb-4">Delivery Form</h1>
-    <form>
+    <form action="" id="checkout-form">
         <div class="form-group">
             <label for="address">Address</label>
-            <textarea class="form-control" id="address" rows="3" placeholder="Enter your address" required></textarea>
+            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter your address" required></textarea>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="pincode">Pincode</label>
-                <input type="text" class="form-control" id="pincode" placeholder="Enter your pincode" required>
+                <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter your pincode" required>
             </div>
             <div class="form-group col-md-6">
                 <label for="mobile">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile number" required>
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
             </div>
         </div>
+        <input type="text" name="userId" id="" value="{{user._id}}" hidden>
         <div class="form-group">
             <label>Payment Options</label><br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="paymentOption" id="cod" value="COD" required>
-                <label class="form-check-label" for="cod">Cash on Delivery</label>
+                <input class="form-check-input" type="radio" name="payment-method"  value="COD" required>
+                <label class="form-check-label" >Cash on Delivery</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="paymentOption" id="online" value="online" required>
-                <label class="form-check-label" for="online">Online Payment</label>
+                <input class="form-check-input" type="radio" name="payment-method"  value="online" required>
+                <label class="form-check-label" >Online Payment</label>
             </div>
         </div>
         <div class="form-group">
@@ -64,3 +65,17 @@
         <button type="submit" class="btn btn-primary btn-block">Checkout</button>
     </form>
 </div>
+
+<script>
+    $("#checkout-form").submit((e)=>{
+        e.preventDefault()
+        $.ajax({
+            url:'/place-order',
+            method:'post',
+            data:$('#checkout-form').serialize(),
+            success:(response)=>{
+                alert(response)
+            }
+        })
+    })
+</script>
