@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            padding: 10px;
+            min-width: 150px;
+        }
+
+        .btn-action {
+            color: #fff;
+        }
+
+        .btn-action:hover {
+            color: #fff;
+        }
+
+        .btn-view {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-view:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-5"> <!-- Use container-fluid for full-width -->
+        <h1 class="mb-4 text-center">View Orders</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Address</th>
+                        <th>Pincode</th>
+                        <th>Mobile No</th>
+                        <th>Total Amount</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td>{{this.date}}</td>
+                        <td>{{this.deliveryDetails.address}}</td>
+                        <td>{{this.deliveryDetails.pincode}}</td>
+                        <td>{{this.deliveryDetails.mobile}}</td>
+                        <td>{{this.totalAmount}}</td>
+                        <td>{{this.paymentMethod}}</td>
+                        <td>{{this.status}}</td>
+                        <td>
+                            <a href="/view-order-products/{{this._id}}" class="btn btn-primary btn-action btn-view">View Products</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

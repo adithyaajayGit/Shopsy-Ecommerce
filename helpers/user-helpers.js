@@ -244,7 +244,8 @@ module.exports={
                 totalAmount:total,
                 products:products,
                 status:status,
-                date:new Date()
+                date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                
             }
 
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
@@ -254,6 +255,7 @@ module.exports={
 
       })
     },
+    
 
 
     getCartProductList:(userId)=>{
@@ -262,8 +264,61 @@ module.exports={
                 console.log(cart)
                 resolve(cart.products)
             })
+    },
+
+
+    getUserOrders:(userId)=>{
+          return new Promise(async(resolve,reject)=>{
+            let orders=await db.get().collection(collection.ORDER_COLLECTION)
+            .find({userId:objectId(userId)}).toArray()
+            console.log(orders);
+            resolve(orders)
+          })
+    },
+
+    getOrderProducts: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                    {
+                        $match: { _id: objectId(orderId) }
+                    },
+                    {
+                        $unwind: '$products'
+                    },
+                    {
+                        $lookup: {
+                            from: collection.PRODUCT_COLLECTION,
+                            localField: 'products.item',
+                            foreignField: '_id',
+                            as: 'product'
+                        }
+                    },
+                    {
+                        $project: {
+                            item: '$product._id',
+                            productName: '$product.productName',
+                            description: '$product.description',
+                            price: '$product.price',
+                            quantity: '$products.quantity'
+                        }
+                    }
+                ]).toArray();
+    
+                if (orderItems.length > 0) {
+                    resolve(orderItems);
+                } else {
+                    resolve([]); // If no items found, resolve with an empty array
+                }
+            } catch (error) {
+                console.error("Error in getOrderProducts:", error);
+                reject(error);
+            }
+        });
+    },
+    
+     
     }
 
 
     
-}
