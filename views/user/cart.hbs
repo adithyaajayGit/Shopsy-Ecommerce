@@ -96,7 +96,7 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Total Amount:
-                <span class="total" id="total">{{₹totalValue}}</span>
+                <span class="total" id="total">₹{{totalValue}}</span>
               </li>
             </ul>
             <a href="/place-order"><button class="btn btn-primary btn-block mt-3">Place Order</button></a>
@@ -130,7 +130,7 @@
                     location.reload()
         }else{
           document.getElementById(proId).innerHTML=quantity+count
-          document.getElementById('total').innerHTML=response.total
+          document.getElementById('total').innerHTML='₹'+ response.total
           
         }
       }
