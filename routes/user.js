@@ -68,7 +68,7 @@ router.get('/logout',(req,res)=>{
 router.get( '/cart', verifyLogin,async(req,res)=>{
   let products=await userHelpers.getCartProducts(req.session.user._id)
   let totalValue=0;
-  if(products.length>0){
+  if(products.length>0){  
     totalValue=await userHelpers.getTotalAmount(req.session.user._id)
   }
   console.log(products)
