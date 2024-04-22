@@ -4,6 +4,7 @@ const productHelpers = require('../helpers/product-helpers');
 const razorpayHelper = require('../helpers/razorpay-helper')
 const userHelpers=require('../helpers/user-helpers');
 const { response } = require('../app');
+const { route } = require('./admin');
 const verifyLogin=(req,res,next)=>{
   if(req.session.loggedIn){
     next()
@@ -108,8 +109,8 @@ router.post('/place-order', async (req, res) => {
   let totalPrice = await userHelpers.getTotalAmount(req.body.userId);
   
   userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
-      if (req.body['payment-method'] == 'COD') {
-          res.json({ status: true });
+      if (req.body['payment-method'] === 'COD') {
+          res.json({ codSuccess: true });
       } else {
           razorpayHelper.generateRazorpay(orderId, totalPrice).then((response) => {
               res.json(response);
@@ -136,4 +137,7 @@ router.get('/view-order-products/:id',async(req,res)=>{
   res.render('user/view-order-products',{user:req.session.user,products})
 })
 
+router.post('/verify-payment',(req,res)=>{
+  console.log(req.body)
+})
 module.exports = router;
