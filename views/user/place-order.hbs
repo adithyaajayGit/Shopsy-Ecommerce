@@ -89,15 +89,11 @@
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
     "name": "Shopsy", //your business name
-    "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
+    "description": "Shopsy Razorpay",
+    "image": "https://serve2business.com/wp-content/uploads/2021/09/unnamed.png",
     "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
-
-
+       
         verifyPayment(response,order)
     },
     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
@@ -125,7 +121,14 @@
                 payment,
                 order
             },
-            method:'post'
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+               location.href='/order-confirm'
+                }else{
+                    alert("Payment failed ")
+                }
+            }
         })
     }
 </script>
