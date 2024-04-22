@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers');
+const razorpayHelper = require('../helpers/razorpay-helper')
 const userHelpers=require('../helpers/user-helpers');
 const { response } = require('../app');
 const verifyLogin=(req,res,next)=>{
@@ -102,14 +103,24 @@ router.get('/place-order',verifyLogin,async(req,res)=>{
   res.render('user/place-order',{total,user:req.session.user})
 })
 
-router.post('/place-order',async(req,res)=>{
-  let products=await userHelpers.getCartProductList(req.body.userId)
-  let totalPrice=await userHelpers.getTotalAmount(req.body.userId)
-  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    res.json({status:true})
-  })
-  console.log(req.body)
-})
+router.post('/place-order', async (req, res) => {
+  let products = await userHelpers.getCartProductList(req.body.userId);
+  let totalPrice = await userHelpers.getTotalAmount(req.body.userId);
+  
+  userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
+      if (req.body['payment-method'] == 'COD') {
+          res.json({ status: true });
+      } else {
+          razorpayHelper.generateRazorpay(orderId, totalPrice).then((response) => {
+              res.json(response);
+          });
+      }
+  }).catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal Server Error" });
+  });
+});
+
 
 router.get('/order-confirm',verifyLogin,(req,res)=>{
   res.render('user/order-confirm',{user:req.session.user})
