@@ -6,7 +6,7 @@ const userHelpers=require('../helpers/user-helpers');
 const { response } = require('../app');
 const { route } = require('./admin');
 const verifyLogin=(req,res,next)=>{
-  if(req.session.user.loggedIn){
+  if(req.session.userloggedIn){
     next()
   }else{
     res.redirect('/login')
@@ -63,7 +63,8 @@ router.post('/login',(req,res)=>{
   })
 })
 router.get('/logout',(req,res)=>{
-  req.session.user=null
+  req.session.user=null;
+  req.session.userloggedIn=false;
   res.redirect('/')
 })
 router.get( '/cart', verifyLogin,async(req,res)=>{

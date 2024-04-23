@@ -3,7 +3,6 @@ var router = express.Router();
 var productHelper=require('../helpers/product-helpers');
 const productHelpers = require('../helpers/product-helpers');
 const { response } = require('../app');
-const adminHelpers = require('../helpers/adminhelper');
 const { route } = require('./admin');
  // Make sure to include a semicolon at the end of this line
 
