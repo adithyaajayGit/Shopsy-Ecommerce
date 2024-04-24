@@ -88,7 +88,7 @@
 <body>
 
 <div class="form-container">
-  <form action="/login" method="post">
+  <form action="/admin/login" method="post">
     {{#if loginErr}}
     <p class="error">{{loginErr}}</p>
     {{/if}}
@@ -105,9 +105,9 @@
     </div>
     
     <button type="submit" class="btn btn-primary">Login</button>
-    <div class="registration-link">
-      Don't have an account? <a href="/signup"> Register here</a>
-    </div>
+    {{!-- <div class="registration-link">
+      Don't have an account? <a href="/admin/signup"> Register here</a>
+    </div> --}}
   </form>
 </div>
 

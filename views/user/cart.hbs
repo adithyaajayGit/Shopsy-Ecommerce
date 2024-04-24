@@ -51,45 +51,49 @@
   <div class="container mt-5">
     <h1 class="text-center mb-4">Your Shopping Cart</h1>
     <div class="row">
-      <div class="col-md-9"> <!-- Increase width to col-md-9 -->
-        {{#each products}}
-        <div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">{{this.product.productName}}</h5>
-        <div class="row align-items-center">
-            <div class="col-md-3">
-                <img src="/product-images/{{this.product._id}}.jpg" alt="Product Image" class="product-img">
+      <div class="col-md-9">
+        {{#if products.length}}
+          {{#each products}}
+            <div class="card mb-3">
+              <div class="card-body">
+                  <h5 class="card-title">{{this.product.productName}}</h5>
+                  <div class="row align-items-center">
+                      <div class="col-md-3">
+                          <img src="/product-images/{{this.product._id}}.jpg" alt="Product Image" class="product-img">
+                      </div>
+                      <div class="col-md-5">
+                          <p class="card-text">{{this.product.description}}</p>
+                      </div>
+                      <div class="col-md-2">
+                          <h6>₹{{this.product.price}}</h6>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="input-group">
+                              <span class="input-group-prepend">
+                                  <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
+                              </span>
+                              <span id="{{this.product._id}}" class="form-control quantity-input">{{this.quantity}}</span>
+                              <span class="input-group-append">
+                                  <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <button class="btn btn-outline-danger remove-btn float-right" type="button" onclick="removeProduct('{{this._id}}', '{{this.product._id}}')">Remove</button>
+                      </div>
+                  </div>
+              </div>
             </div>
-            <div class="col-md-5">
-                <p class="card-text">{{this.product.description}}</p>
-            </div>
-            <div class="col-md-2">
-                <h6>₹{{this.product.price}}</h6>
-            </div>
-            <div class="col-md-2">
-                <div class="input-group">
-                    <span class="input-group-prepend">
-                        <button class="btn btn-outline-secondary decrement-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
-                    </span>
-                    <span id="{{this.product._id}}" class="form-control quantity-input">{{this.quantity}}</span>
-                    <span class="input-group-append">
-                        <button class="btn btn-outline-secondary increment-btn" type="button" onclick="changequantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-outline-danger remove-btn float-right" type="button" onclick="removeProduct('{{this._id}}', '{{this.product._id}}')">Remove</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-        
-        {{/each}}
+          {{/each}}
+        {{else}}
+          <div class="alert alert-info" role="alert">
+              Your cart is empty.
+          </div>
+        {{/if}}
       </div>
-      <div class="col-md-3"> <!-- Adjust remaining width accordingly -->
+      <div class="col-md-3">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Order Summary</h5>
@@ -100,68 +104,63 @@
               </li>
             </ul>
             {{#if products}}
-            <a href="/place-order"><button class="btn btn-primary btn-block mt-3">Place Order</button></a>
+              <a href="/place-order"><button class="btn btn-primary btn-block mt-3">Place Order</button></a>
             {{/if}}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    function changequantity(cartId,proId,userId,count){
+      let quantity=parseInt(document.getElementById(proId).innerHTML)
+      count=parseInt(count)
+      $.ajax({
+        url:'/change-product-quantity',
+        data:{
+          user:userId,
+          cart:cartId,
+          product:proId,
+          count:count,
+          quantity:quantity
+        },
+        method:'post',
+        success:(response)=>{
+          if(response.removeProduct){
+            alert("product removed from cart")
+            location.reload()
+          }else{
+            document.getElementById(proId).innerHTML=quantity+count
+            document.getElementById('total').innerHTML='₹'+ response.total
+          }
+        }
+      })
+    }
+
+    function removeProduct(cartId, productId) {
+      if (confirm("Are you sure you want to remove this product from your cart?")) {
+        $.ajax({
+          url: '/remove-product',
+          method: 'POST',
+          data: {
+            cartId: cartId,
+            productId: productId
+          },
+          success: function(response) {
+            if (response) {
+              alert("Product removed from cart");
+              location.reload();
+            } else {
+              alert("Failed to remove product from cart");
+            }
+          },
+          error: function() {
+            alert("Error occurred while removing product from cart");
+          }
+        });
+      }
+    }
+  </script>
 </body>
 </html>
-
-<script>
-  
-
-  function changequantity(cartId,proId,userId,count){
-    let quantity=parseInt(document.getElementById(proId).innerHTML)
-    count=parseInt(count)
-    $.ajax({
-      url:'/change-product-quantity',
-      data:{
-        user:userId,
-        cart:cartId,
-        product:proId,
-        count:count,
-        quantity:quantity
-      },
-      method:'post',
-      success:(response)=>{
-        if(response.removeProduct){
-                    alert("product removed from cart")
-                    location.reload()
-        }else{
-          document.getElementById(proId).innerHTML=quantity+count
-          document.getElementById('total').innerHTML='₹'+ response.total
-          
-        }
-      }
-    })
-  }
-
-
-  function removeProduct(cartId, productId) {
-    if (confirm("Are you sure you want to remove this product from your cart?")) {
-        $.ajax({
-            url: '/remove-product',
-            method: 'POST', // 'Post' should be 'POST'
-            data: {
-                cartId: cartId,
-                productId: productId
-            },
-            success: function(response) {
-                if (response) { // Check if the response is true
-                    alert("Product removed from cart");
-                    location.reload();
-                } else {
-                    alert("Failed to remove product from cart");
-                }
-            },
-            error: function() {
-                alert("Error occurred while removing product from cart");
-            }
-        });
-    }
-}
-
-</script>

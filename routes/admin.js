@@ -5,7 +5,13 @@ const productHelpers = require('../helpers/product-helpers');
 const { response } = require('../app');
 const { route } = require('./admin');
  // Make sure to include a semicolon at the end of this line
-
+ const verifyLogin=(req,res,next)=>{
+  if(req.session.admin.loggedIn){
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
 
 
 /* GET users listing. */
@@ -85,6 +91,48 @@ router.get('/adminorders',async(req,res)=>{
 router.get('/view-order-products/:id',async(req,res)=>{
   let products=await productHelpers.getOrderProducts(req.params.id)
   res.render('admin/view-order-products',{admin:true,products})
+})
+
+router.get('/login',(req,res)=>{
+  if(req.session.admin){
+
+    res.redirect('/admin/')
+  }
+    else{
+    res.render('admin/login',{"loginErr":req.session.adminLoginErr})
+    req.session.adminLoginErr=false;
+    }
+})
+
+router.get('/signup',(req,res)=>{
+  res.render('admin/signup')
+})
+
+router.post('/signup',(req,res)=>{
+  productHelpers.doSignup(req.body).then((response)=>{
+    console.log(response);
+    req.session.admin=response
+    req.session.admin.loggedIn=true
+    res.redirect('/admin/')
+  })
+})
+
+router.post('/login',(req,res)=>{
+  productHelpers.doLogin(req.body).then((response)=>{
+    if(response.status){
+      req.session.admin=response.admin
+      req.session.admin.loggedIn=true
+      res.redirect('/admin/')
+    }else{
+      req.session.adminLoginErr="invalid username or password"
+      res.redirect('admin/login')
+    }
+  })
+})
+router.get('/logout',(req,res)=>{
+  req.session.admin=null;
+  req.session.adminloggedIn=false;
+  res.redirect('/')
 })
 
 
