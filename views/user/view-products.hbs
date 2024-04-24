@@ -19,7 +19,6 @@
             transition: transform 0.3s ease;
             background-color: #fff;
         }
-        
 
         .card:hover {
             transform: translateY(-5px);
@@ -27,7 +26,7 @@
         }
 
         .card-img-top {
-            object-fit:contain;
+            object-fit: contain;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             height: 230px;
@@ -60,13 +59,27 @@
             background-color: #4834d4;
             border-color: #4834d4;
         }
+
+        /* Message container styles */
+        .no-results-msg {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 
 <section>
     <div class="container mt-5">
-        <div class="row">
+        <!-- Search input field -->
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search products">
+
+        <div class="row" id="productContainer">
             {{#each products}}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
@@ -81,8 +94,42 @@
             </div>
             {{/each}}
         </div>
+
+        <!-- No results message -->
+        <div id="noResultsMsg" class="no-results-msg">No matching products found.</div>
     </div>
 </section>
+
+<script>
+    // Function to filter products based on search query
+    function filterProducts() {
+        var input, filter, cards, cardContainer, title, i, found;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("productContainer");
+        cards = cardContainer.getElementsByClassName("card");
+        found = false; // Flag to track if any matching products are found
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].querySelector(".card-title");
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+                found = true; // Matching product found
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+        // Show/hide no results message
+        var noResultsMsg = document.getElementById("noResultsMsg");
+        if (!found) {
+            noResultsMsg.style.display = "block"; // Display message if no results found
+        } else {
+            noResultsMsg.style.display = "none"; // Hide message if results found
+        }
+    }
+
+    // Event listener for search input
+    document.getElementById("searchInput").addEventListener("keyup", filterProducts);
+</script>
 
 </body>
 </html>
