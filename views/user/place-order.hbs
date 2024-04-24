@@ -73,7 +73,7 @@
             method:'post',
             data:$('#checkout-form').serialize(),
             success:(response)=>{
-                alert("Order placed")
+                alert("proceeded")
                 if(response.codSuccess){
                     location.href='/order-confirm'
                 }else{

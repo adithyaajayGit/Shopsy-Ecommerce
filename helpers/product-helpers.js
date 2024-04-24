@@ -47,5 +47,73 @@ module.exports={
                 resolve()
             })
         })
-    }
+    },
+
+
+    getOrders: () => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            // Fetch orders from the order collection
+            let orders = await db.get().collection(collection.ORDER_COLLECTION).find().toArray();
+      
+            // Fetch user details for each order based on user ID
+            for (let order of orders) {
+              // Fetch user details from the user collection using the user ID associated with the order
+              let user = await db.get().collection(collection.USER_COLLECTION).findOne({_id: order.userId});
+              // Add the user's email to the order object
+              order.userEmail = user.Email; // Accessing the 'Email' field of the user object
+            }
+      
+            resolve(orders);
+          } catch (error) {
+            console.error('Error fetching orders:', error);
+            reject(error);
+          }
+        });
+      },
+
+
+      getOrderProducts: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                    {
+                        $match: { _id: objectId(orderId) }
+                    },
+                    {
+                        $unwind: '$products'
+                    },
+                    {
+                        $lookup: {
+                            from: collection.PRODUCT_COLLECTION,
+                            localField: 'products.item',
+                            foreignField: '_id',
+                            as: 'product'
+                        }
+                    },
+                    {
+                        $project: {
+                            item: '$product._id',
+                            productName: '$product.productName',
+                            description: '$product.description',
+                            price: '$product.price',
+                            quantity: '$products.quantity'
+                        }
+                    }
+                ]).toArray();
+    
+                if (orderItems.length > 0) {
+                    resolve(orderItems);
+                } else {
+                    resolve([]); // If no items found, resolve with an empty array
+                }
+            } catch (error) {
+                console.error("Error in getOrderProducts:", error);
+                reject(error);
+            }
+        });
+    },
+    
+      
+      
 }

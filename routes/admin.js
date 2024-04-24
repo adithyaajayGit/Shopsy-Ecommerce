@@ -27,7 +27,7 @@ router.post('/add-product',(req,res)=>{
     console.log(id);
     image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
       if(!err){
-        res.render("admin/add-product");
+        res.render("/");
       }else{
         console.log(err);
       }
@@ -77,7 +77,15 @@ router.post('/edit-product/:id', (req, res) => {
   // Redirect to the admin page
   res.redirect('/admin');
 });
+router.get('/adminorders',async(req,res)=>{
+  let orders=await productHelpers.getOrders()
+  res.render('admin/adminorders',{admin:true,orders})
+})
 
+router.get('/view-order-products/:id',async(req,res)=>{
+  let products=await productHelpers.getOrderProducts(req.params.id)
+  res.render('admin/view-order-products',{admin:true,products})
+})
 
 
 module.exports = router;
