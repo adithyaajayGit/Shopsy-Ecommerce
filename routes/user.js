@@ -6,7 +6,7 @@ const userHelpers=require('../helpers/user-helpers');
 const { response } = require('../app');
 const { route } = require('./admin');
 const verifyLogin=(req,res,next)=>{
-  if(req.session.userloggedIn){
+  if(req.session.user.loggedIn){
     next()
   }else{
     res.redirect('/login')

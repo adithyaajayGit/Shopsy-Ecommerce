@@ -27,7 +27,7 @@ router.post('/add-product',(req,res)=>{
     console.log(id);
     image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
       if(!err){
-        res.render("/");
+        res.redirect('/admin/');
       }else{
         console.log(err);
       }
